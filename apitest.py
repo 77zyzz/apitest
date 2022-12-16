@@ -67,17 +67,18 @@ class MyMainForm(QMainWindow, Ui_MainWindow):
 
         try:
             a=self.currentclass.run()
+            print(a)
             if a:
                 self.textEdit.append(f"{self.currentapi}可以使用")
                 for i in self.currentclass.list_all_member():
                     #print(eval(f"self.currentclass.{i}"))
                     self.textEdit.append(f"{i}:{eval(f'self.currentclass.{i}')}")
-
             else:
                 self.textEdit.append(f"{self.currentapi}测试不通")
         except Exception as e:
-            print(e)
-        
+            #print(e)
+            self.textEdit.append(f"{self.currentapi}测试不通")
+            
             
 
 
