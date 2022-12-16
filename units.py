@@ -1,6 +1,6 @@
 import requests
+import json
 
-#类属性
 
 class baseapi():
     def list_all_member(self):
@@ -14,18 +14,26 @@ class censys(baseapi):
     censys_api_id = None
     censys_api_secret = None
 
+
     def run(self):
-        # Construct the request URL
-        url = "https://www.censys.io/api/v1/search/ipv4"
 
-        # Make the request
-        response = requests.get(url, auth=(self.censys_api_id, self.censys_api_secret))
-
-        # Check the status code
-        if response.status_code == 200:
+        data = {
+            'query': f'parsed.names:google.com',
+            'page': 1,
+            'fields': ['parsed.subject_dn', 'parsed.names'],
+            'flatten': True}
+        resp = requests.post('https://search.censys.io/api/v1/search/certificates', json=data, auth=(self.censys_api_id, self.censys_api_secret))
+        if not resp:
+            return
+        json = resp.json()
+        status = json.get('status')
+        if status == 'ok':
             return True
         else:
             return False
+
+
+
 
 #这个不对，要重新写
 # Bing可以免费注册获取API：https://azure.microsoft.com/zh-cn/services/
